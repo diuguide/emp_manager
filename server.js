@@ -23,7 +23,7 @@ function mainQuery() {
                     "Add Departments, Roles, or Employees",
                     "View Departments, Roles, or Employees",
                     "Update Employee Roles",
-                    // "Update Employee Managers",
+                    "Update Employee Managers",
                     // "View Employees by Manager",
                     "Delete Departments, Roles, or Employees"
                 ]
@@ -40,9 +40,9 @@ function mainQuery() {
                 case 'Update Employee Roles':
                     updateQuery();
                     break;
-                // case 'Update Employee Managers':
-                //     managerQuery();
-                //     break;
+                case 'Update Employee Managers':
+                    managerQuery();
+                    break;
                 // case 'View Employees by Manager':
                 //     man_empQuery();
                 //     break;
@@ -90,7 +90,8 @@ function addQuery() {
 const departmentChoices = {
     viewDepartments: "View Departments",
     viewRoles: "View Roles",
-    viewEmployees: "View Employees"
+    viewEmployees: "View Employees",
+    viewAll: "View All"
 }
 function viewQuery() {
     inquirer.prompt([
@@ -101,7 +102,8 @@ function viewQuery() {
             choices: [
                 departmentChoices.viewDepartments,
                 departmentChoices.viewRoles,
-                departmentChoices.viewEmployees
+                departmentChoices.viewEmployees,
+                departmentChoices.viewAll
             ]
         }
 
@@ -116,6 +118,9 @@ function viewQuery() {
                 break;
             case departmentChoices.viewEmployees:
                 viewEmployees();
+                break;
+            case departmentChoices.viewAll:
+                viewAll();
                 break;
             default:
                 mainQuery();
@@ -180,6 +185,41 @@ function deleteQuery() {
         }
     })
 }
+function managerQuery() {
+    connection.query("SELECT * FROM employee ORDER BY manager_id ASC", (err, results) => {
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ EMPLOYEE LIST ++++++++++++++')
+        console.log('            (sorted by managers)           ')
+        console.log('-------------------------------------------')
+        console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
+    })
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'empId',
+            message: 'Enter the Employee ID of the employee you want to update the manager for:'
+        },
+        {
+            type: 'input',
+            name: 'manId',
+            message: 'Please enter the new manager ID:'
+        }
+    ]).then(answers => {
+        connection.query('UPDATE employee SET manager_id = ? WHERE id = ?', [answers.manId, answers.empId], (err) => {
+            if (err) throw err;
+            console.log('\n');
+            console.log('-------------------------------------------')
+            console.log("!!! The Employee Role has been updated !!!!");
+            console.log('-------------------------------------------')
+            console.log('\n');
+            mainQuery();
+        })
+})
+}
+
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err, results) => {
         console.log('\n');
@@ -213,6 +253,29 @@ function viewEmployees() {
         console.table(results);
         console.log('\n');
         console.log('-------------------------------------------')
+        mainQuery();
+    })
+}
+function viewAll() {
+    connection.query("SELECT * FROM employee", (err, results) => {
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ EMPLOYEE LIST ++++++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+    })
+    connection.query("SELECT * FROM department", (err, results) => {
+        console.log('-------------------------------------------')
+        console.log('+++++++++++ COMPANY DEPARTMENTS +++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+    })
+    connection.query("SELECT * FROM role", (err, results) => {
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ COMPANY ROLES ++++++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+        console.log('\n');
         mainQuery();
     })
 }
