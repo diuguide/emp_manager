@@ -158,8 +158,10 @@ function updateQuery() {
 }
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err, results) => {
-        console.log('-------------------------------------------')
         console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('+++++++++++ COMPANY DEPARTMENTS +++++++++++')
+        console.log('-------------------------------------------')
         console.table(results);
         console.log('\n');
         console.log('-------------------------------------------')
