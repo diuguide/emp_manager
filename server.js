@@ -154,7 +154,7 @@ function updateQuery() {
         })
     })
 
-    
+
 }
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err, results) => {
@@ -182,7 +182,13 @@ function viewRoles() {
 }
 function viewEmployees() {
     connection.query("SELECT * FROM employee", (err, results) => {
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ EMPLOYEE LIST ++++++++++++++')
+        console.log('-------------------------------------------')
         console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
         mainQuery();
     })
 }
@@ -196,7 +202,11 @@ function addDepartment() {
     ]).then(answers4 => {
         connection.query("INSERT INTO department(name)VALUES(?)", answers4.name, (err) => {
             if (err) throw err;
-            console.log("Department has been added");
+            console.log('\n');
+            console.log('-------------------------------------------')
+            console.log("!!!!!!!! Department has been added !!!!!!!!");
+            console.log('-------------------------------------------')
+            console.log('\n');
             mainQuery();
         })
     })
