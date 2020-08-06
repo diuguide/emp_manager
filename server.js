@@ -25,7 +25,7 @@ function mainQuery() {
                     "Update Employee Roles",
                     // "Update Employee Managers",
                     // "View Employees by Manager",
-                    // "Delete Departments, Roles, or Employees"
+                    "Delete Departments, Roles, or Employees"
                 ]
             }
         ]).then(answers => {
@@ -46,9 +46,9 @@ function mainQuery() {
                 // case 'View Employees by Manager':
                 //     man_empQuery();
                 //     break;
-                // case 'Delete Departments, Roles, or Employees':
-                //     deleteQuery();
-                //     break;
+                case 'Delete Departments, Roles, or Employees':
+                    deleteQuery();
+                    break;
                 default:
                     mainQuery();
                     break;
@@ -140,6 +140,29 @@ function updateQuery() {
             }
         ]).then(answers3 => {
             connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [answers3.newRole, answers3.empId], (err) => {
+                if (err) throw err;
+                console.log('\n');
+                console.log('-------------------------------------------')
+                console.log("!!! The Employee Role has been updated !!!!");
+                console.log('-------------------------------------------')
+                console.log('\n');
+                mainQuery();
+            })
+        })
+    })
+}
+function deleteQuery() {
+    connection.query("SELECT * FROM employee", (err, results) => {
+        console.log('\n' + '\n');
+        console.table(results);
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "empId",
+                message: "Please enter the ID of an employee to DELETE"
+            }
+        ]).then(answers6 => {
+            connection.query("DELETE FROM employee WHERE id = ?", answers6.empId, (err) => {
                 if (err) throw err;
                 console.log('\n');
                 console.log('-------------------------------------------')
