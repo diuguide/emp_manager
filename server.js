@@ -139,22 +139,17 @@ function updateQuery() {
                 message: "Enter a new role ID to be assigned to the employee"
             }
         ]).then(answers3 => {
-            console.log(answers3);
             connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [answers3.newRole, answers3.empId], (err) => {
                 if (err) throw err;
-                console.log("Employee Role has been Updated!");
                 console.log('\n');
+                console.log('-------------------------------------------')
+                console.log("!!! The Employee Role has been updated !!!!");
+                console.log('-------------------------------------------')
+                console.log('\n');
+                mainQuery();
             })
-            connection.query("SELECT * FROM employee", (err, results) => {
-                console.log("UPDATED EMPLOYEE LIST");
-                console.table(results);
-            })
-            console.log('\n');
-            mainQuery();
         })
     })
-
-
 }
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err, results) => {
@@ -232,7 +227,11 @@ function addRole() {
     ]).then(answers5 => {
         connection.query("INSERT INTO role(title, salary, department_id)VALUES(?, ?, ?)", [answers5.title, answers5.salary, answers5.depId], (err) => {
             if (err) throw err;
-            console.log("Role has been added");
+            console.log('\n');
+            console.log('-------------------------------------------')
+            console.log("!!!!!!!! A New Role has been added !!!!!!!!");
+            console.log('-------------------------------------------')
+            console.log('\n');
             mainQuery();
         })
     });
@@ -262,7 +261,11 @@ function addEmployee() {
     ]).then(answers6 => {
         connection.query("INSERT INTO employee(first_name, last_name, role_id, manager_id)VALUES(?, ?, ?, ?)", [answers6.firstname, answers6.lastname, answers6.roleId, answers6.managerId], (err) => {
             if (err) throw err;
-            console.log("Employee has been added!");
+            console.log('\n');
+            console.log('-------------------------------------------')
+            console.log("!!!!!! A New Employee has been added !!!!!!");
+            console.log('-------------------------------------------')
+            console.log('\n');
             mainQuery();
         })
     })
