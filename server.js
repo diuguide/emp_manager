@@ -152,26 +152,32 @@ function updateQuery() {
     })
 }
 function deleteQuery() {
-    connection.query("SELECT * FROM employee", (err, results) => {
-        console.log('\n' + '\n');
-        console.table(results);
-        inquirer.prompt([
-            {
-                type: "input",
-                name: "empId",
-                message: "Please enter the ID of an employee to DELETE"
-            }
-        ]).then(answers6 => {
-            connection.query("DELETE FROM employee WHERE id = ?", answers6.empId, (err) => {
-                if (err) throw err;
-                console.log('\n');
-                console.log('-------------------------------------------')
-                console.log("!!! The Employee Role has been updated !!!!");
-                console.log('-------------------------------------------')
-                console.log('\n');
-                mainQuery();
-            })
-        })
+    console.log('\n');
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'delete',
+            message: "Please choose from the menu below:",
+            choices: [
+                "DELETE Department",
+                "DELETE Role",
+                "DELETE Employee"
+            ]
+        }
+    ]).then(answers6 => {
+        switch (answers6.delete) {
+            case 'DELETE Employee':
+                deleteEmployee();
+                break;
+            case 'DELETE Department':
+                deleteDepartment();
+                break;
+            case 'DELETE Role':
+                deleteRole();
+                break;
+            default:
+                deleteQuery();
+        }
     })
 }
 function viewDepartments() {
@@ -293,9 +299,90 @@ function addEmployee() {
         })
     })
 }
-
-
-
-
-
-
+function deleteEmployee() {
+    connection.query("SELECT * FROM employee", (err, results) => {
+        if (err) throw err;
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ EMPLOYEE LIST ++++++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
+    })
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "empId",
+            message: "Please enter the employee ID of the employee you want to delete:"
+        }
+    ]).then(answers7 => {
+        connection.query("DELETE FROM employee WHERE id = ?", answers7.empId, (err) => {
+            if (err) throw err;
+            console.log('\n');
+            console.log('-------------------------------------------');
+            console.log("***** The Employee has been DELETED *******");
+            console.log('-------------------------------------------');
+            console.log('\n');
+            mainQuery();
+        })
+    })
+}
+function deleteRole() {
+    connection.query("SELECT * FROM role", (err, results) => {
+        if (err) throw err;
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ COMPANY ROLES ++++++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
+    })
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "roleId",
+            message: "Please enter the role ID of the role you want to delete:"
+        }
+    ]).then(answers => {
+        connection.query("DELETE FROM role WHERE id = ?", answers.roleId, (err) => {
+            if (err) throw err;
+            console.log('\n');
+            console.log('-------------------------------------------');
+            console.log("******* The Role has been DELETED *********");
+            console.log('-------------------------------------------');
+            console.log('\n');
+            mainQuery();
+        })
+    })
+}
+function deleteDepartment() {
+    connection.query("SELECT * FROM department", (err, results) => {
+        if (err) throw err;
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('+++++++++++ COMPANY DEPARTMENTS +++++++++++')
+        console.log('-------------------------------------------')
+        console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
+    })
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "depId",
+            message: "Please enter the Department ID of the department you want to DELETE:"
+        }
+    ]).then(answers => {
+        connection.query("DELETE FROM department WHERE id = ?", answers.depId, (err) => {
+            if (err) throw err;
+            console.log('\n');
+            console.log('-------------------------------------------');
+            console.log("***** The Department has been DELETED *****");
+            console.log('-------------------------------------------');
+            console.log('\n');
+            mainQuery();
+        })
+    })
+}
