@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/diuguide/emp_manager#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "express": "^4.17.1",
     "inquirer": "^7.3.3",
     "mysql": "^2.18.1"
