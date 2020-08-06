@@ -158,13 +158,23 @@ function updateQuery() {
 }
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err, results) => {
+        console.log('-------------------------------------------')
+        console.log('\n');
         console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
         mainQuery();
     })
 }
 function viewRoles() {
     connection.query("SELECT * FROM role", (err, results) => {
+        console.log('\n');
+        console.log('-------------------------------------------')
+        console.log('++++++++++++++ COMPANY ROLES ++++++++++++++')
+        console.log('-------------------------------------------')
         console.table(results);
+        console.log('\n');
+        console.log('-------------------------------------------')
         mainQuery();
     })
 }
